@@ -1,12 +1,12 @@
-﻿
+﻿Dictionary<string, int> resources = new Dictionary<string, int>();
 
-Dictionary<string, int> resorces = new Dictionary<string, int>();
+resources.Add("Money", 0);
+resources.Add("Stone", 0);
+resources.Add("Iron", 0);
+resources.Add("Coal", 0);
+resources.Add("Diamond", 0);
 
-resorces.Add("Money", 0);
-resorces.Add("Stone", 0);
-resorces.Add("Iron", 0);
-resorces.Add("Coal", 0);
-resorces.Add("Diamond", 0);
+Dictionary<string, (int Amount, int price, float OPS)> building = new Dictionary<string, (int, int, float)>(); //OPS = Ores per second of course. 
 
 
 static void HavestingResorces(Dictionary<string, int> resources)
@@ -48,10 +48,37 @@ static void HavestingResorces(Dictionary<string, int> resources)
 }
 static void Hub(Dictionary<string, int> resources)
 {
-    Console.WriteLine($"${resources["Money"]}");
-    Console.ReadLine();
-    HavestingResorces(resources);
+    ConsoleKey pressedKey = Console.ReadKey(true).Key;
+    if (pressedKey == ConsoleKey.U)
+    {
+        UpgradeShop(resources);
+    }
+    else if (pressedKey == ConsoleKey.B)
+    {
+        BuildingShop(resources);
+    }
+    Hub(resources);
 }
+static void UpgradeShop(Dictionary<string, int> resources)
+{
+    Console.WriteLine($"${resources["Money"]}");
 
-HavestingResorces(resorces);
+}
+// ska nog sätta i hop dem om jag någonsin gör raylib
+static void BuildingShop(Dictionary<string, int> resources)
+{
+    ConsoleKey pressedKey = Console.ReadKey(true).Key;
+    Console.WriteLine("");
+    int witchBuilding = 1;
+    if (pressedKey == ConsoleKey.UpArrow)
+    {
+        if (witchBuilding)
+        witchBuilding++;
+    }
+    else if (pressedKey == ConsoleKey.DownArrow)
+    {
+        witchBuilding--;
+    }
+}
+HavestingResorces(resources);
 Console.ReadLine();
