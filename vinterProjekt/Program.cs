@@ -1,15 +1,11 @@
 ﻿using System.Runtime;
 using buildingClass;
 int money = 0;
-Building empolye = new Building("Empolye", 10, 0.1f);
+Building empolye = new Building("Employee", 10, 0.1f);
+Building empolyes = new Building("Employees", 10, 0.1f);
+List <Building> allBuildings = [empolye, empolyes];
 
-// Dictionary<int, (string name, int amount, int price, float OPS)> building = new Dictionary<int, (string, int, int, float)>(); //OPS = Ores per second of course. 
-
-// building.Add(1, ("Employe", 0, 10, 0.1f));
-// building.Add(2, ("Employew", 0, 10, 0.1f));
-
-
-static void HavestingResorces(int money, Dictionary<int, (string name, int amount, int price, float OPS)> buildings)
+static void HavestingResorces(int money, List<Building> allBuildings)
 {
     ConsoleKey pressedKey = Console.ReadKey(true).Key;
     if (pressedKey == ConsoleKey.Spacebar)
@@ -18,18 +14,18 @@ static void HavestingResorces(int money, Dictionary<int, (string name, int amoun
         Console.Clear();
         Console.WriteLine(money);
         Console.WriteLine("Press [H] for hub");
-        HavestingResorces(money, buildings);
+        HavestingResorces(money, allBuildings);
     }
     else if (pressedKey == ConsoleKey.H)
     {
-        Hub(money, buildings);
+        Hub(money, allBuildings);
     }
     else
     {
-        HavestingResorces(money, buildings);
+        HavestingResorces(money, allBuildings);
     }
 }
-static void Hub(int money, Dictionary<int, (string name, int amount, int price, float OPS)> buildings)
+static void Hub(int money, List<Building> allBuildings)
 {
     Console.Clear();
     Console.WriteLine("Press [U] for upgrade, [B] for bildning shop, [I] for information, [Space] to go back to clicker");
@@ -40,15 +36,15 @@ static void Hub(int money, Dictionary<int, (string name, int amount, int price, 
     }
     else if (pressedKey == ConsoleKey.B)
     {
-        BuildingShop(money, buildings);
+        BuildingShop(money, allBuildings);
     }
     else if (pressedKey == ConsoleKey.Spacebar)
     {
-        HavestingResorces(money, buildings);
+        HavestingResorces(money, allBuildings);
     }
     else
     {
-        Hub(money, buildings);
+        Hub(money, allBuildings);
     }
 }
 static void UpgradeShop(int money)
@@ -57,16 +53,17 @@ static void UpgradeShop(int money)
 
 }
 // ska nog sätta i hop dem om jag någonsin gör raylib
-static void BuildingShop(int money)
+static void BuildingShop(int money, List<Building> allBuildings)
 {
-    int witchBuilding = 1;
+    int witchBuilding = 0;
+    
     while (true)
     {
         ConsoleKey pressedKey = Console.ReadKey(true).Key;
         Console.Clear();
         if (pressedKey == ConsoleKey.UpArrow)
         {
-            if (witchBuilding == 1)
+            if (witchBuilding == 0)
             {
                 Console.WriteLine("You are at the higest point alredy");
             }
@@ -77,7 +74,7 @@ static void BuildingShop(int money)
         }
         else if (pressedKey == ConsoleKey.DownArrow)
         {
-            if (witchBuilding == buildings.Count)
+            if (witchBuilding == allBuildings.Count - 1)
             {
                 Console.WriteLine("You are at the lowest point alredy");
             }
@@ -88,27 +85,28 @@ static void BuildingShop(int money)
         }
         else if (pressedKey == ConsoleKey.Enter)
         {
-            AfordeChecker(money, buildings, witchBuilding);
+            AfordeChecker(money, allBuildings, witchBuilding);
         }
-        for (int i = 1; i < buildings.Count + 1; i++)
+        for (int i = 0; i < allBuildings.Count; i++)
         {
             if (witchBuilding == i)
             {
-                Console.WriteLine($">{buildings[i].name}<");
+                Console.WriteLine($">{allBuildings[i].name}<");
             }
             else
             {
-                Console.WriteLine(buildings[i].name);
+                Console.WriteLine(allBuildings[i].name);
             }
         }
     }
 }
-void AfordeChecker(int money, int witchBuilding)
+static void AfordeChecker(int money, List<Building> allBuildings, int witchBuilding)
 {
-    if (buildings[witchBuilding].price <= money)
+    if (allBuildings[witchBuilding].price <= money)
     {
-        empolye.amount += 1;
+        allBuildings[witchBuilding].amount += 1;
+        Console.WriteLine(allBuildings[witchBuilding].amount);
     }
 }
-HavestingResorces(money, buildings);
+HavestingResorces(money, allBuildings);
 Console.ReadLine();
