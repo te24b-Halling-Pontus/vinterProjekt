@@ -1,62 +1,45 @@
-﻿using System.Runtime;
-using buildingClass;
-int money = 0;
+﻿using buildingClass;
+
+float money = 0;
 Building empolye = new Building("Employee", 10, 0.1f);
 Building empolyes = new Building("Employees", 10, 0.1f);
-List <Building> allBuildings = [empolye, empolyes];
+List<Building> allBuildings = [empolye, empolyes];
 
-static void HavestingResorces(int money, List<Building> allBuildings)
+
+static float HavestingResorces(List<Building> allBuildings)
 {
-    ConsoleKey pressedKey = Console.ReadKey(true).Key;
-    if (pressedKey == ConsoleKey.Spacebar)
+    return(1.5f);
+}
+static void Hub(float money, List<Building> allBuildings)
+{
+    while (true)             
     {
-        money++;
         Console.Clear();
-        Console.WriteLine(money);
-        Console.WriteLine("Press [H] for hub");
-        HavestingResorces(money, allBuildings);
-    }
-    else if (pressedKey == ConsoleKey.H)
-    {
-        Hub(money, allBuildings);
-    }
-    else
-    {
-        HavestingResorces(money, allBuildings);
-    }
-}
-static void Hub(int money, List<Building> allBuildings)
-{
-    Console.Clear();
-    Console.WriteLine("Press [U] for upgrade, [B] for bildning shop, [I] for information, [Space] to go back to clicker");
-    ConsoleKey pressedKey = Console.ReadKey(true).Key;
-    if (pressedKey == ConsoleKey.U)
-    {
-        UpgradeShop(money);
-    }
-    else if (pressedKey == ConsoleKey.B)
-    {
-        BuildingShop(money, allBuildings);
-    }
-    else if (pressedKey == ConsoleKey.Spacebar)
-    {
-        HavestingResorces(money, allBuildings);
-    }
-    else
-    {
-        Hub(money, allBuildings);
+        Console.WriteLine("Press [U] for upgrade, [B] for bildning shop, [I] for information, [Space] to go back to clicker");
+        Console.WriteLine($"You have ${(int)money}");
+        ConsoleKey pressedKey = Console.ReadKey(true).Key;
+        if (pressedKey == ConsoleKey.U)
+        {
+            UpgradeShop(money);
+        }
+        else if (pressedKey == ConsoleKey.B)
+        {
+            BuildingShop(money, allBuildings);
+        }
+        else if (pressedKey == ConsoleKey.Spacebar)
+        {
+            money += HavestingResorces(allBuildings);
+        }
     }
 }
-static void UpgradeShop(int money)
+static void UpgradeShop(float money)
 {
     Console.WriteLine(money);
-
 }
 // ska nog sätta i hop dem om jag någonsin gör raylib
-static void BuildingShop(int money, List<Building> allBuildings)
+static void BuildingShop(float money, List<Building> allBuildings)
 {
     int witchBuilding = 0;
-    
     while (true)
     {
         ConsoleKey pressedKey = Console.ReadKey(true).Key;
@@ -83,30 +66,38 @@ static void BuildingShop(int money, List<Building> allBuildings)
                 witchBuilding++;
             }
         }
-        else if (pressedKey == ConsoleKey.Enter)
-        {
-            AfordeChecker(money, allBuildings, witchBuilding);
-        }
+        else if (pressedKey == ConsoleKey.Enter) {AfordeChecker(money, allBuildings, witchBuilding);}
+        else if (pressedKey == ConsoleKey.Escape) { break; }
         for (int i = 0; i < allBuildings.Count; i++)
-        {
-            if (witchBuilding == i)
             {
-                Console.WriteLine($">{allBuildings[i].name}<");
+                if (witchBuilding == i)
+                {
+                    Console.WriteLine($">{allBuildings[i].name}<");
+                }
+                else
+                {
+                    Console.WriteLine(allBuildings[i].name);
+                }
             }
-            else
-            {
-                Console.WriteLine(allBuildings[i].name);
-            }
-        }
     }
 }
-static void AfordeChecker(int money, List<Building> allBuildings, int witchBuilding)
+static void AfordeChecker(float money, List<Building> allBuildings, int witchBuilding)
 {
     if (allBuildings[witchBuilding].price <= money)
     {
         allBuildings[witchBuilding].amount += 1;
         Console.WriteLine(allBuildings[witchBuilding].amount);
     }
+    else
+    {
+        Console.WriteLine($"allBuilding");
+    }
 }
-HavestingResorces(money, allBuildings);
-Console.ReadLine();
+static void MoneyGenerator(List<Building> allBuildings)
+{    
+    while (true)
+    {
+
+    }
+}
+Hub(money, allBuildings);
