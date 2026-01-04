@@ -15,7 +15,8 @@ static void Hub(float money, List<Building> allBuildings)
     while (true)
     {
         Console.Clear();
-        Console.WriteLine("Press [U] for upgrade, [B] for building shop, [I] for information, [Space] to go back to clicker");
+        Console.WriteLine(MoneyGenerator(allBuildings));
+        Console.WriteLine("Press [U] for upgrade, [B] for building shop, [I] for information, [Space] to get money");
         Console.WriteLine($"You have ${(int)money}"); // Int for i don´t want to have menny decimal numbers
         ConsoleKey pressedKey = Console.ReadKey(true).Key;
         if (pressedKey == ConsoleKey.U)
@@ -30,6 +31,7 @@ static void Hub(float money, List<Building> allBuildings)
         {
             money += HavestingResorces(allBuildings);
         }
+        // money += MoneyGenerator(allBuildings);
     }
 }
 static void UpgradeShop(float money)
@@ -44,12 +46,10 @@ static float BuildingShop(float money, List<Building> allBuildings)
     Console.WriteLine("Press [down arrow] to go down and [Up arrow] to go up");
     Console.WriteLine("Press [esc] to exit to main meny");
     PrintBuilding(whichBuilding, allBuildings);
-    ConsoleKey pressedKey = Console.ReadKey(true).Key;
     while (true)
     {
+        ConsoleKey pressedKey = Console.ReadKey(true).Key;
         Console.Clear();
-        pressedKey = Console.ReadKey(true).Key;
-        PrintBuilding(whichBuilding, allBuildings);
         if (pressedKey == ConsoleKey.UpArrow)
         {
             if (whichBuilding == 0)
@@ -80,6 +80,7 @@ static float BuildingShop(float money, List<Building> allBuildings)
         {
             return (money);
         }
+        PrintBuilding(whichBuilding, allBuildings);
     }
 }
 static void PrintBuilding(int whichBuilding, List<Building> allBuildings)
@@ -110,11 +111,21 @@ static float AfordeChecker(float money, List<Building> allBuildings, int whichBu
     }
     return (money);
 }
-static void MoneyGenerator(List<Building> allBuildings)
+static float MoneyGenerator(List<Building> allBuildings )
 {
     while (true)
     {
-        Raylib.GetFrameTime();
+        float timewaited =+ Raylib.GetFrameTime();
+        Console.WriteLine(timewaited);
+        if (timewaited <= 0.1f)
+        {
+            for (int i = 0; i < allBuildings.Count; i++)
+            {
+                timewaited = 0;
+                Console.WriteLine(allBuildings[i].OPS * allBuildings[i].amount * 0.1f);
+                return (allBuildings[i].OPS * allBuildings[i].amount * 0.1f);
+            }
+        }
     }
 }
 Hub(money, allBuildings);
