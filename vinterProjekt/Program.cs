@@ -36,28 +36,91 @@ static void Hub(float money, List<Building> allBuildings, float totalMoney)
         }
     }
 }
-static void UpgradeShop(List<Building> allBuildings, float money)
+static float UpgradeShop(List<Building> allBuildings, float money)
 {
-    int whichUpgrade = 0;
-    printUpgrade(allBuildings, whichUpgrade);
+    List<int> upgardePrice = [100, 1000, 10000, 10000, 10000];
+    int whichUpgrade = -1;
+    Console.Clear();
+    Console.WriteLine("Press [down arrow] to go down and [Up arrow] to go up");
+    Console.WriteLine("Press [esc] to exit to main meny");
+    printUpgrade(allBuildings, whichUpgrade, upgardePrice);
     while (true)
     {
-        printUpgrade(allBuildings, whichUpgrade);
+        ConsoleKey pressedKey = Console.ReadKey(true).Key;
+        Console.Clear();
+        Console.WriteLine("Press [down arrow] to go down and [Up arrow] to go up");
+        Console.WriteLine("Press [esc] to exit to main meny");
+        if (pressedKey == ConsoleKey.UpArrow)
+        {
+            if (whichUpgrade == -1)
+            {
+                Console.WriteLine("You are at the higest point alredy");
+            }
+            else
+            {
+                whichUpgrade--;
+            }
+        }
+        else if (pressedKey == ConsoleKey.DownArrow)
+        {
+            if (whichUpgrade == allBuildings.Count - 1)
+            {
+                Console.WriteLine("You are at the lowest point alredy");
+            }
+            else
+            {
+                whichUpgrade++;
+            }
+        }
+        else if (pressedKey == ConsoleKey.Enter)
+        {
+            UpgradeAfordChecker(whichUpgrade, money, ref upgardePrice, allBuildings);
+        }
+        else if (pressedKey == ConsoleKey.Escape)
+        {
+            return (money);
+        }
+        printUpgrade(allBuildings, whichUpgrade, upgardePrice);
     }
 }
-static void printUpgrade(List<Building> allBuildings, int whichUpgrade)
+static void printUpgrade(List<Building> allBuildings, int whichUpgrade, List<int> upgradePrice)
 {
     Console.WriteLine("    Name\tPrice\tEffect");
-    for (int i = 0; i < allBuildings.Count; i++)
+    for (int i = -1; i < allBuildings.Count; i++)
     {
-        if (whichUpgrade == i)
+        if (i == -1)
         {
-            Console.WriteLine($">{allBuildings[i].name}<");
+            if (whichUpgrade == i)
+            {
+                Console.WriteLine($">Click upgrade<\t{upgradePrice[i + 1]}\t2x click reward");
+            }
+            else
+            {
+                Console.WriteLine($"Click upgrade\t{upgradePrice[i + 1]}\t2x click reward");
+            }
+        }
+        else if (whichUpgrade == i)
+        {
+            Console.WriteLine($">{allBuildings[i].name} upgrade<\t{upgradePrice[i]}\t2x MPS");
         }
         else
         {
-            Console.WriteLine($"{allBuildings[i].name}");
+            Console.WriteLine($"{allBuildings[i].name} upgrade\t{upgradePrice[i]}\t2x MPS");
         }
+    }
+}
+static void UpgradeAfordChecker(int whichUpgrade, float money, ref List<int> upgradePrice, List<Building> allBuildings)
+{
+    if (upgradePrice[whichUpgrade + 1] <= money)
+    {
+        allBuildings[whichUpgrade].MPS *= 2;
+        money -= upgradePrice[whichUpgrade + 1];
+        Console.WriteLine($"You spent ${upgradePrice[whichUpgrade]} to get a 2x muiltiplayer, you have ${money} left");
+        upgradePrice[whichUpgrade + 1] *= (int)();
+    }
+    else
+    {
+        Console.WriteLine($"{(int)(upgradePrice[whichUpgrade] - money)} less then what you need");
     }
 }
 static float BuildingShop(ref float money, List<Building> allBuildings)
@@ -97,7 +160,7 @@ static float BuildingShop(ref float money, List<Building> allBuildings)
         }
         else if (pressedKey == ConsoleKey.Enter)
         {
-            money = AfordeChecker(money, allBuildings, whichBuilding);
+            money = BuildingAfordeChecker(money, allBuildings, whichBuilding);
         }
         else if (pressedKey == ConsoleKey.Escape)
         {
@@ -121,19 +184,19 @@ static void PrintBuilding(int whichBuilding, List<Building> allBuildings)
         }
     }
 }
-static float AfordeChecker(float money, List<Building> allBuildings, int whichBuilding)
+static float BuildingAfordeChecker(float money, List<Building> allBuildings, int whichBuilding)
 {
     if (allBuildings[whichBuilding].price <= money)
     {
         allBuildings[whichBuilding].amount += 1;
         money -= allBuildings[whichBuilding].price;
-        Console.WriteLine($"You spent ${(int)allBuildings[whichBuilding].price} now you have {allBuildings[whichBuilding].amount} {allBuildings[whichBuilding].name}");
+        Console.WriteLine($"You spent ${allBuildings[whichBuilding].price} now you have {allBuildings[whichBuilding].amount} {allBuildings[whichBuilding].name}");
         //incresing the price
-        allBuildings[whichBuilding].price = (int)(10 * Math.Pow(1.1f, allBuildings[whichBuilding].amount));
+        allBuildings[whichBuilding].price *= (int)(10 * Math.Pow(1.1f, allBuildings[whichBuilding].amount));
     }
     else
     {
-        Console.WriteLine($"{(int)allBuildings[whichBuilding].price - money} less then what you need");
+        Console.WriteLine($"{(int)(allBuildings[whichBuilding].price - money)} less then what you need");
     }
     return (money);
 }
