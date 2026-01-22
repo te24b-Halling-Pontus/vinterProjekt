@@ -1,17 +1,24 @@
 ﻿using buildingClass;
 
+int upgradeUnlocked = 1;
+int multi = 1;
 float money = 0;
 float totalMoney = 0;
 
+List<int> upgradeReached = [1, 1, 1, 1, 1];
+
 List<Building> allBuildings = [];
 allBuildings.Add(new Building("Employee", 10, 0.1f));
-allBuildings.Add(new Building("Employees", 10, 0.1f));
+allBuildings.Add(new Building("Farm", 60, 0.5f));
+allBuildings.Add(new Building("Mine", 250, 10f));
+allBuildings.Add(new Building("Factory", 1000, 20f));
+allBuildings.Add(new Building("Bank", 10000, 50f));
 
 static float HavestingResorces(List<Building> allBuildings)
 {
     return (100f);
 }
-static void Hub(float money, List<Building> allBuildings, float totalMoney)
+static void Hub(float money, List<Building> allBuildings, float totalMoney, int upgradeUnlocked, List<int> upgradeReached)
 {
     Thread workThread = new Thread(() => MoneyGenerator(allBuildings, ref money, ref totalMoney));
     workThread.Start();
@@ -116,7 +123,7 @@ static void UpgradeAfordChecker(int whichUpgrade, float money, ref List<int> upg
         allBuildings[whichUpgrade].MPS *= 2;
         money -= upgradePrice[whichUpgrade + 1];
         Console.WriteLine($"You spent ${upgradePrice[whichUpgrade]} to get a 2x muiltiplayer, you have ${money} left");
-        upgradePrice[whichUpgrade + 1] *= (int)();
+        upgradePrice[whichUpgrade + 1] *= (int)(1);
     }
     else
     {
@@ -192,7 +199,7 @@ static float BuildingAfordeChecker(float money, List<Building> allBuildings, int
         money -= allBuildings[whichBuilding].price;
         Console.WriteLine($"You spent ${allBuildings[whichBuilding].price} now you have {allBuildings[whichBuilding].amount} {allBuildings[whichBuilding].name}");
         //incresing the price
-        allBuildings[whichBuilding].price *= (int)(10 * Math.Pow(1.1f, allBuildings[whichBuilding].amount));
+        allBuildings[whichBuilding].price = (int)(allBuildings[whichBuilding].startPrice * Math.Pow(1.1f, allBuildings[whichBuilding].amount));
     }
     else
     {
@@ -212,4 +219,4 @@ static void MoneyGenerator(List<Building> allBuildings, ref float money, ref flo
         Thread.Sleep(100); // 100ms beacuse I Think that you don´t need to update more often.
     }
 }
-Hub(money, allBuildings, totalMoney);
+Hub(money, allBuildings, totalMoney, upgradeUnlocked, upgradeReached);
