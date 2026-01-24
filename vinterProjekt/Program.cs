@@ -1,25 +1,28 @@
 ﻿using buildingClass;
 
-int upgradeUnlocked = 1;
-int multi = 1;
-float money = 0;
-float totalMoney = 0;
-
-List<int> upgradeReached = [1, 1, 1, 1, 1];
-
-List<Building> allBuildings = [];
-allBuildings.Add(new Building("Employee", 10, 0.1f));
-allBuildings.Add(new Building("Farm", 60, 0.5f));
-allBuildings.Add(new Building("Mine", 250, 10f));
-allBuildings.Add(new Building("Factory", 1000, 20f));
-allBuildings.Add(new Building("Bank", 10000, 50f));
 
 static float HavestingResorces(List<Building> allBuildings)
 {
     return (100f);
 }
-static void Hub(float money, List<Building> allBuildings, float totalMoney, int upgradeUnlocked, List<int> upgradeReached)
+static void Hub()
 {
+    int upgradeUnlocked = 1;
+    int multi = 1;
+    int clickValue = 1;
+    float money = 0;
+    float totalMoney = 0;
+
+    List<int> upgradeReached = [1, 1, 1, 1, 1, 1];
+    List<int> upgradePrice = [100, 1000, 10000, 10000, 10000, 100000];
+
+    List<Building> allBuildings = [];
+    allBuildings.Add(new Building("Employee", 10, 0.1f));
+    allBuildings.Add(new Building("Farm", 60, 0.5f));
+    allBuildings.Add(new Building("Mine", 250, 10f));
+    allBuildings.Add(new Building("Factory", 1000, 20f));
+    allBuildings.Add(new Building("Bank", 10000, 50f));
+
     Thread workThread = new Thread(() => MoneyGenerator(allBuildings, ref money, ref totalMoney));
     workThread.Start();
     while (true)
@@ -30,7 +33,7 @@ static void Hub(float money, List<Building> allBuildings, float totalMoney, int 
         ConsoleKey pressedKey = Console.ReadKey(true).Key;
         if (pressedKey == ConsoleKey.U)
         {
-            UpgradeShop(allBuildings, money);
+            UpgradeShop(allBuildings, money, upgradePrice, upgradeReached, upgradeUnlocked, multi, clickValue);
         }
         else if (pressedKey == ConsoleKey.B)
         {
@@ -43,14 +46,13 @@ static void Hub(float money, List<Building> allBuildings, float totalMoney, int 
         }
     }
 }
-static float UpgradeShop(List<Building> allBuildings, float money)
+static float UpgradeShop(List<Building> allBuildings, float money, List<int> upgradePrice, List<int> upgradeReached, int upgradeUnlocked, int multi, int clickValue)
 {
-    List<int> upgardePrice = [100, 1000, 10000, 10000, 10000];
     int whichUpgrade = -1;
     Console.Clear();
     Console.WriteLine("Press [down arrow] to go down and [Up arrow] to go up");
     Console.WriteLine("Press [esc] to exit to main meny");
-    printUpgrade(allBuildings, whichUpgrade, upgardePrice);
+    printUpgrade(allBuildings, whichUpgrade, upgradePrice);
     while (true)
     {
         ConsoleKey pressedKey = Console.ReadKey(true).Key;
@@ -81,13 +83,13 @@ static float UpgradeShop(List<Building> allBuildings, float money)
         }
         else if (pressedKey == ConsoleKey.Enter)
         {
-            UpgradeAfordChecker(whichUpgrade, money, ref upgardePrice, allBuildings);
+            UpgradeAfordChecker(whichUpgrade, money, ref upgradePrice, allBuildings);
         }
         else if (pressedKey == ConsoleKey.Escape)
         {
             return (money);
         }
-        printUpgrade(allBuildings, whichUpgrade, upgardePrice);
+        printUpgrade(allBuildings, whichUpgrade, upgradePrice);
     }
 }
 static void printUpgrade(List<Building> allBuildings, int whichUpgrade, List<int> upgradePrice)
@@ -123,7 +125,7 @@ static void UpgradeAfordChecker(int whichUpgrade, float money, ref List<int> upg
         allBuildings[whichUpgrade].MPS *= 2;
         money -= upgradePrice[whichUpgrade + 1];
         Console.WriteLine($"You spent ${upgradePrice[whichUpgrade]} to get a 2x muiltiplayer, you have ${money} left");
-        upgradePrice[whichUpgrade + 1] *= (int)(1);
+        upgradePrice[whichUpgrade + 1] *= (10);
     }
     else
     {
@@ -178,16 +180,16 @@ static float BuildingShop(ref float money, List<Building> allBuildings)
 }
 static void PrintBuilding(int whichBuilding, List<Building> allBuildings)
 {
-    Console.WriteLine("    Name\tPrice\tAmount\tMPS");
+    Console.WriteLine($"    {"Name", -15}{"Price", 10}{"Amount", 10}{"MPS", 10}");
     for (int i = 0; i < allBuildings.Count; i++)
     {
         if (whichBuilding == i)
         {
-            Console.WriteLine($">{allBuildings[i].name}<\t${allBuildings[i].price}\t{allBuildings[i].amount}\t{allBuildings[i].MPS}");
+            Console.WriteLine($">{allBuildings[i].name + "<", -14}{"$" + allBuildings[i].price, 10}{allBuildings[i].amount, 10}{allBuildings[i].MPS, 10}");
         }
         else
         {
-            Console.WriteLine($" {allBuildings[i].name}\t${allBuildings[i].price}\t{allBuildings[i].amount}\t{allBuildings[i].MPS}");
+            Console.WriteLine($" {allBuildings[i].name, -15:1F}{"$" + allBuildings[i].price, 10}{allBuildings[i].amount, 10}{allBuildings[i].MPS, 10}");
         }
     }
 }
@@ -219,4 +221,4 @@ static void MoneyGenerator(List<Building> allBuildings, ref float money, ref flo
         Thread.Sleep(100); // 100ms beacuse I Think that you don´t need to update more often.
     }
 }
-Hub(money, allBuildings, totalMoney, upgradeUnlocked, upgradeReached);
+Hub();
