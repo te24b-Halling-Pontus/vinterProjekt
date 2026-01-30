@@ -13,7 +13,7 @@ static void Hub()
     int multi = 1;
     int clickValue = 1;
     int upgradeqouta = 1000;
-    int rebirthCount = 1;
+    int nextRebirthCount = 1;
     int curentRebirthCount = 1;
     float rebirthQuota = 1000000;
     float money = 0;
@@ -43,8 +43,11 @@ static void Hub()
         }
         if (totalMoney >= rebirthQuota)
         {
-            rebirthCount++;
+            nextRebirthCount++;
             rebirthQuota = 1.1f * rebirthQuota + rebirthQuota;
+            Console.WriteLine($"You can now rebirth and earn {nextRebirthCount - curentRebirthCount} rebirth score.");
+            Console.WriteLine("press enter to continue");
+            Console.ReadLine();
         }
         Console.Clear();
         Console.WriteLine("Press [U] for upgrade, [B] for building shop, [I] for information, [Space] to get money, [R] for rebirth meny");
@@ -69,7 +72,7 @@ static void Hub()
         }
         else if (pressedKey == ConsoleKey.R)
         {
-            wanttorebirth = Rebirth(rebirthCount, rebirthQuota, totalMoney, curentRebirthCount);
+            wanttorebirth = Rebirth(nextRebirthCount, rebirthQuota, totalMoney, curentRebirthCount);
             if (wanttorebirth == true)
             {
                 wanttorebirth = false;
@@ -302,18 +305,22 @@ static void Info()
     Console.WriteLine("Earing money:");
     Console.WriteLine("You can earn money buy two ways, you can tap space and pasivly with buildings");
     Console.WriteLine("You buy buildings in the bulding shop, press [B]");
-    Console.WriteLine("the money you earn buy pressing space i determen buy your click upgrade its click value*multi\n");
+    Console.WriteLine("The money you earn buy pressing space i determen buy your click upgrade its click value*multi\n");
     Console.WriteLine("Upgrades:");
     Console.WriteLine("There are two difrent upgrade types, Building and click upgrades");
     Console.WriteLine("Building upgrades make you earn 2 time more money/ dubles your MPS");
     Console.WriteLine("Click upgrades make you space click earn more money, either multi or click value");
-    Console.WriteLine("you need to reatch a new upgrade level to be abel to buy a new upgrade exept for the first click upgrade");
-    Console.WriteLine("you can upgrade the first click upgrade how menny times you want without needing to reatch a new upgrade level");
-    Console.WriteLine("you upgrade level i determen buy total money earn (like xp), when you go up in level you can upgrade all upgrades one more time\n");
+    Console.WriteLine("You need to reatch a new upgrade level to be abel to buy a new upgrade exept for the first click upgrade");
+    Console.WriteLine("You can upgrade the first click upgrade how menny times you want without needing to reatch a new upgrade level");
+    Console.WriteLine("You upgrade level i determen buy total money earn (like xp), when you go up in level you can upgrade all upgrades one more time\n");
     Console.WriteLine("Meny:");
-    Console.WriteLine("you go up on arow up and down on arow down and contine on enter\n");
-    Console.WriteLine("press enter to go back to the game");
+    Console.WriteLine("You go up on arow up and down on arow down and contine on enter\n");
+    Console.WriteLine("Press enter to go back to the game");
     Console.ReadLine();
+    Console.WriteLine("Rebirth:");
+    Console.WriteLine("Det funkar som ett vanligt rebirth system du blir av med all progres gemtimot att du får enklare pengar på din nya run");
+    Console.WriteLine("You don`t need to rebirth as soon as yoiu get the chanse beacuse you can earn more rebirth score (one rebirth score = one rebirth)");
+
 }
 static bool Rebirth(int nextRebirthCount, float rebirthQuota, float totalMoney, int curentRebirthCount)
 {
