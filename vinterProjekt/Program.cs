@@ -4,7 +4,7 @@
 
 static float HavestingResorces(List<Building> allBuildings, int multi, int clickValue)
 {
-    return (clickValue * multi * 10000);
+    return (clickValue * multi);
 }
 static void Hub()
 {
@@ -188,16 +188,17 @@ static void UpgradeAfordChecker(int whichUpgrade, float money, ref List<int> upg
             if (whichUpgrade == -1)
             {
                 multi *= 2;
+                money -= upgradePrice[whichUpgrade + 2];
                 Console.WriteLine($"You spent ${upgradePrice[whichUpgrade + 2]} to get a two times more money for every click, you have ${(int)money} left");
                 upgradePrice[whichUpgrade + 2] *= (10);
             }
             else if (whichUpgrade >= 0)
             {
+                money -= upgradePrice[whichUpgrade + 2];
                 allBuildings[whichUpgrade].MPS *= 2;
                 Console.WriteLine($"You spent ${upgradePrice[whichUpgrade + 2]} to get a 2x multiplayer, you have ${(int)money} left");
                 upgradePrice[whichUpgrade + 2] *= (10);
             }
-            money -= upgradePrice[whichUpgrade + 2];
             upgradeReached[whichUpgrade + 2]++;
         }
         else
@@ -315,11 +316,11 @@ static void Info()
     Console.WriteLine("You upgrade level i determen buy total money earn (like xp), when you go up in level you can upgrade all upgrades one more time\n");
     Console.WriteLine("Meny:");
     Console.WriteLine("You go up on arow up and down on arow down and contine on enter\n");
-    Console.WriteLine("Press enter to go back to the game");
-    Console.ReadLine();
     Console.WriteLine("Rebirth:");
     Console.WriteLine("Det funkar som ett vanligt rebirth system du blir av med all progres gemtimot att du får enklare pengar på din nya run");
-    Console.WriteLine("You don`t need to rebirth as soon as yoiu get the chanse beacuse you can earn more rebirth score (one rebirth score = one rebirth)");
+    Console.WriteLine("You don`t need to rebirth as soon as yoiu get the chanse beacuse you can earn more rebirth score (one rebirth score = one rebirth)\n");
+    Console.WriteLine("Press enter to go back to the game");
+    Console.ReadLine();
 
 }
 static bool Rebirth(int nextRebirthCount, float rebirthQuota, float totalMoney, int curentRebirthCount)
